@@ -1,0 +1,18 @@
+policies:
+- name: cis-macie-not-enabled
+  resource: aws.account
+  comment: |
+    CIS AWS Foundations v1.4.0 (2.1.4). This policy identifies the    
+    account where AWS Macie is not enabled.
+  filters:
+    — not: 
+       - type: check-macie
+         key: status
+         value: Enabled 
+         op: eq
+  mode:
+    schedule: “rate(24 hours)”
+    type: periodic
+    execution-options:
+      output_dir: s3://s3bucket/path/{account_id}/
+    runtime: python3.8

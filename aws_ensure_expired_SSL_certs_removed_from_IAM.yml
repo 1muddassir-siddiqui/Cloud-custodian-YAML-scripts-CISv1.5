@@ -1,0 +1,24 @@
+policies:
+- name: cis-iam-certificate-expired
+  resource: aws.iam-certificate
+  comment: |
+    CIS AWS Foundations v1.4.0 (1.19)
+    Removing expired SSL/TLS certificates eliminates the risk that 
+    an invalid certificate will be deployed accidentally to a 
+    resource such as AWS Elastic Load Balancer (ELB), which can 
+    damage the credibility of the application / website behind the 
+    ELB. As a best practice, it is recommended to delete expired 
+    certifiates. This policy identifies the expired IAM 
+    Certificates. 
+  filters:
+    — type: value
+      key: Expiration
+      value: 0
+      value_type: expiration
+      op: greater-than
+  mode:
+    schedule: “rate(24 hours)”
+    type: periodic
+    execution-options:
+      output_dir: s3://s3bucket/path/{account_id}/
+    runtime: python3.8

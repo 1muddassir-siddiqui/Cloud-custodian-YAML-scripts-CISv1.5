@@ -1,0 +1,19 @@
+policies:
+- name: cis-iam-saml-provider-is-not-enabled
+  resource: aws.iam-saml-provider
+  comment: |
+    CIS Amazon Web Services Foundations v1.4.0 (1.21). Centralizing   
+    IAM user management to a single identity store reduces 
+    complexity and thus the likelihood of access management errors.
+  filters:
+    — not: 
+      - type: value
+        key: Arn
+        value: ABCD
+        op: contains
+  mode:
+    schedule: “rate(24 hours)”
+    type: periodic
+    execution-options:
+      output_dir: s3://s3bucket/path/{account_id}/
+    runtime: python3.8

@@ -1,0 +1,38 @@
+policies:
+- name: cis-ebs-encryption-not-enabled-at-account-level
+  resource: aws.ebs
+  comment: |
+    CIS Amazon Web Services Foundations v1.4.0 (2.2.1).Encrypting 
+    data at rest reduces the likelihood that it is unintentionally 
+    exposed and can nullify the impact of disclosure if the 
+    encryption remains unbroken. This policy identifies where this 
+    configuration is not enabled at account level (Go to EC2 in 
+    console, under account attributes click EBS encryption to find 
+    the settings).
+  filters:
+    — type: "value"
+       key: 
+         type: ebsEncryptionByDefault
+         op: eq 
+         value: false 
+  mode:
+    schedule: “rate(1 hours)”
+    type: periodic
+    execution-options:
+      output_dir: s3://testkubecost/dev/{account_id}/
+      #s3://testkubecost/dev/
+    runtime: python3.8
+  actions:
+    - type: notify
+      to:
+        - event-user
+        - resource-creator
+        - 1muddassir.siddiqui@gmail.com
+      owner_absent_contact:
+        - siddiquimohammed@mycloudbuilders.com
+          # which template for the email should we use
+      template: policy-template
+      transport:
+          type: sns
+          region: ap-south-1
+          topic: Custodian_Alarm

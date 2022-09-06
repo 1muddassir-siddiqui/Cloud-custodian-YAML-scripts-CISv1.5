@@ -1,0 +1,20 @@
+Ensure that the IAM Access analyzer is enabled — Level 1 (Automated)
+
+policies:
+- name: cis-iam-access-analyzer-enabled
+  resource: aws.account
+  comment: |
+    CIS AWS Foundations v1.4.0 (1.20)
+    This policy identifies if the IAM Access Analyzer is enabled.
+    Active = Monitoring ON DISABLED = Monitoring OFF.
+  filters:
+    — type: access-analyzer
+      key: 'status'
+      value: DISABLED
+      op: eq
+  mode:
+    schedule: “rate(24 hours)”
+    type: periodic
+    execution-options:
+      output_dir: s3://s3bucket/path/{account_id}/
+    runtime: python3.8

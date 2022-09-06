@@ -1,0 +1,27 @@
+policies:
+- name: cis-s3-does-not-enforce-https
+  resource: aws.s3
+  comment: |
+    CIS AWS Foundations v1.4.0 (2.1.2). Identify s3 where https is 
+    not enforced via bucket policy. By default, Amazon S3 allows   
+    both HTTP and HTTPS requests. To achieve only allowing access to 
+    Amazon S3 objects through HTTPS you also have to explicitly deny 
+    access to HTTP requests. Bucket policies that allow HTTPS 
+    requests without explicitly denying HTTP requests will not 
+    comply with this recommendation
+  filters:
+    — not: 
+      - type: has-statement
+        statements: 
+          - Effect: Deny
+            Action: s3:GetObject
+            Principal: '*'
+            Condition:
+              Bool:
+                "aws:SecureTransport": false
+  mode:
+    schedule: “rate(24 hours)”
+    type: periodic
+    execution-options:
+      output_dir: s3://s3bucket/path/{account_id}/
+    runtime: python3.8

@@ -1,0 +1,22 @@
+policies:
+- name: cis-s3-mfadelete-is-not-enabled
+  resource: aws.s3
+  comment: |
+    CIS AWS Foundations v1.4.0 (2.1.3). Identify S3 buckets for 
+    which MFADelete setting has not been configured. Adding MFA 
+    delete to an S3 bucket, requires additional authentication when 
+    you change the version state of your bucket or you delete and 
+    object version adding another layer of security in the event 
+    your security credentials are compromised or unauthorized access 
+    is granted
+  filters:
+    — type: value
+      key: MFADelete
+      value: Enabled 
+      op: ne
+  mode:
+    schedule: “rate(24 hours)”
+    type: periodic
+    execution-options:
+      output_dir: s3://s3bucket/path/{account_id}/
+    runtime: python3.8

@@ -1,0 +1,10 @@
+policies:
+   - name: testS3
+     resource: aws.s3
+     description: detects s3 buckets without encryption
+     filters:
+       - type: no-encryption-statement
+     actions: 
+       - type: tag
+         key: "name"
+         value: "custodian"

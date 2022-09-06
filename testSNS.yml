@@ -1,0 +1,13 @@
+policies:
+    - name: testSNS
+      description: testing if Mailer works
+      resource: aws.ec2
+      filters: 
+          - key: "tag:Custodian"
+            value: absent
+      actions:
+          - tag:
+              type: "marked-for-op" 
+             
+                
+                       

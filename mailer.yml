@@ -1,0 +1,4 @@
+queue_url: https://sqs.ap-south-1.amazonaws.com/564570884715/custodianTest
+role: arn:aws:iam::564570884715:role/sqsFullAccess
+from_address: siddiquimohammed@mycloudbuilders.com
+region: ap-south-1

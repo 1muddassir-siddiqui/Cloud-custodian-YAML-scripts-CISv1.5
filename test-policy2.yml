@@ -1,0 +1,15 @@
+policies:
+  - name: c7n-mailer-test
+    resource: sqs
+    filters:
+      - "tag:MailerTest": absent
+    actions:
+      - type: notify
+        slack_template: slack
+        slack_msg_color: danger
+        to:
+          - slack_channel:https://hooks.slack.com/services/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
+            
+        transport:
+          type: sqs
+          queue: https://sqs.ap-south-1.amazonaws.com/564570884715/custodianTest

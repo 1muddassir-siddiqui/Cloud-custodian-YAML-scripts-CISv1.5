@@ -1,0 +1,27 @@
+policies:
+- name: cis-iam-user-for-daily-tasks
+  resource: aws.iam-user
+  comment: |
+    CIS AWS Foundations v1.4.0 (1.7)
+    With the creation of an AWS account, a root user is created that 
+    cannot be disabled ot deleted. That user has unrestricted access 
+    to and control over all resources in the AWS account. It is 
+    highly recommended that the use of this account be avoided for 
+    everyday tasks.
+  filters:
+    - type: credential
+      key: password_last_used
+      op: lt
+      value: 7
+      value_type: age
+    - type: credential
+      key: access_keys.last_used_date
+      op: lt
+      value: 7
+      value_type: age  
+  mode:
+    schedule: "rate(24 hours)"
+    type: periodic
+    execution-options:
+      output_dir: s3://s3bucket/path/{account_id}/
+    runtime: python3.8

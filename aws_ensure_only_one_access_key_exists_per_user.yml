@@ -1,0 +1,21 @@
+policies:
+- name: cis-iam-user-with-active-keys
+  resource: aws.iam-user
+  comment: |
+    CIS AWS Foundations v1.4.0 (1.13)
+    Access keys are long-term credentials for an IAM user or the AWS 
+    account root user. You can use access keys to sign programmatic  
+    requests to the AWS CLI or AWS API. One of the best ways to 
+    protect your account is to not allow users to have multiple 
+    access keys. This policy provides all the keys that are 
+    activated for the IAM user for investigation.
+  filters:
+    - type: access-key
+      key: Status
+      value: Active
+  mode:
+    schedule: "rate(24 hours)"
+    type: periodic
+    execution-options:
+      output_dir: s3://s3bucket/path/{account_id}/
+    runtime: python3.8

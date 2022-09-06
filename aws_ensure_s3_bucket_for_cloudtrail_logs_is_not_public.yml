@@ -1,0 +1,16 @@
+policies:
+- name: cis-s3-containing-cloudtrail-logs-is-public
+  resource: aws.s3
+  comment: |
+    CIS AWS Foundations v1.4.0 (3.3)
+  filters:
+    — not:
+      - type: check-public-block
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+  mode:
+    schedule: “rate(24 hours)”
+    type: periodic
+    execution-options:
+      output_dir: s3://s3bucket/path/{account_id}/
+    runtime: python3.8

@@ -1,0 +1,18 @@
+policies:
+- name: cis-cloudtrail-logs-not-encrypted
+  resource: aws.s3
+  comment: |
+    CIS Amazon Web Services Foundations v1.4.0 (3.7). Identify 
+    cloudtrails logs that are not encrypted at rest. Configuring 
+    CloudTrail to use SSE-KMS provides additional confidentiality 
+    controls on log data as a given user must have S3 read  
+    permission on the corresponding log bucket and must be granted 
+    decrypt permission by the CMK policy.
+  filters:
+    — KmsKeyId: empty
+  mode:
+    schedule: “rate(24 hours)”
+    type: periodic
+    execution-options:
+      output_dir: s3://s3bucket/path/{account_id}/
+    runtime: python3.8

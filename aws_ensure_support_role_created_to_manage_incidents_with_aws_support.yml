@@ -1,0 +1,19 @@
+policies:
+- name: cis-iam-policy-for-support-is-used
+  resource: aws.iam-policy
+  comment: |
+    CIS AWS Foundations v1.4.0 (1.17).
+    By implementing least privilege for access control, an IAM role 
+    will require an appropriate IAM Policy to allow support center 
+    access in order to manage incidents with AWS support.
+  filters:
+    - type: unused
+    - type: value
+      key: 'PolicyName'
+      value: AWSSupportAccess
+  mode:
+    schedule: "rate(24 hours)"
+    type: periodic
+    execution-options:
+      output_dir: s3://s3bucket/path/{account_id}/
+    runtime: python3.8

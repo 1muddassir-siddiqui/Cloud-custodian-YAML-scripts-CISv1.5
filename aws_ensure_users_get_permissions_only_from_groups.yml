@@ -1,0 +1,19 @@
+policies:
+- name: cis-iam-user-has-inline-or-direct-policy-attached
+  resource: aws.iam-user
+  comment: |
+    CIS AWS Foundations v1.4.0 (1.15).
+    Identifies IAM user if any policies are attached to it (either   
+    in-line or directly attached).
+filters:
+    - or: 
+      - has-inline-policy: true 
+      - type: policy
+        key: PolicyName
+        value: not-null
+mode:
+    schedule: "rate(24 hours)"
+    type: periodic
+    execution-options:
+      output_dir: s3://s3bucket/path/{account_id}/
+    runtime: python3.8

@@ -1,0 +1,21 @@
+policies:
+- name: cis-iam-user-with-unused-access-keys
+  resource: aws.iam-user
+  comment: |
+    CIS AWS Foundations v1.4.0 (1.11)
+  filters:
+    - type: credential
+      key: password_enabled
+      value: true
+    - type: credential
+      key: access_keys.active
+      value: true
+    - type: credential
+      key: access_keys.last_used_date
+      value: absent
+  mode:
+    schedule: "rate(24 hours)"
+    type: periodic
+    execution-options:
+      output_dir: s3://s3bucket/path/{account_id}/
+    runtime: python3.8

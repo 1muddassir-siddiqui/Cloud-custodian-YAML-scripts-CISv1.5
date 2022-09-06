@@ -1,0 +1,15 @@
+policies:
+- name: cis-cloudtrail-not-integrated-cloudwatchlogs
+  resource: aws.cloudtrail
+  comment: |
+    CIS AWS Foundations v1.4.0 (3.4)
+  filters:
+    — type: value
+      key: CloudWatchLogsLogGroupArn
+      value: empty
+  mode:
+    schedule: “rate(24 hours)”
+    type: periodic
+    execution-options:
+      output_dir: s3://s3bucket/path/{account_id}/
+    runtime: python3.8

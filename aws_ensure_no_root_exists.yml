@@ -1,0 +1,21 @@
+policies:
+- name: cis-no-root-access-keys
+  resource: aws.account
+  comment: |
+    CIS AWS Foundations v1.4.0 (1.4)
+    The root user account is the most privileged user in AWS.
+    AWS access keys provide programmatic access to a given AWS        
+    account. It is recommended that all access keys associated with 
+    the root account be removed. 
+  filters:
+    - type: iam-summary
+      key: AccountAccessKeysPresent
+      op: eq
+      value: true
+      value_type: swap
+  mode:
+    schedule: "rate(24 hours)"
+    type: periodic
+    execution-options:
+      output_dir: s3://s3bucket/path/{account_id}/
+    runtime: python3.8

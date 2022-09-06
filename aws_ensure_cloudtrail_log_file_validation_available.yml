@@ -1,0 +1,13 @@
+policies:
+- name: cis-cloudtrail-logfilevalidation-not-enabled
+  resource: aws.cloudtrail
+  comment: |
+    CIS AWS Foundations v1.4.0 (3.2)
+  filters:
+    — LogFileValidationEnabled: false
+  mode:
+    schedule: “rate(24 hours)”
+    type: periodic
+    execution-options:
+      output_dir: s3://s3bucket/path/{account_id}/
+    runtime: python3.8

@@ -1,0 +1,17 @@
+policies:
+- name: cis-iam-no-used-all-all-policy
+  resource: aws.iam-policy
+  comment: |
+    CIS AWS Foundations v1.4.0 (1.16).
+    Providing full administrative privileges instead of restricting 
+    to the minimum set of permissions that the user is required to 
+    do exposes the resources to potentially unwanted actions.
+  filters:
+    - type: used
+    - type: has-allow-all
+  mode:
+    schedule: "rate(24 hours)"
+    type: periodic
+    execution-options:
+      output_dir: s3://s3bucket/path/{account_id}/
+    runtime: python3.8
